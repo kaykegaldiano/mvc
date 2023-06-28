@@ -1,12 +1,14 @@
 <?php
 
+session_start();
+
 require __DIR__ . '/../vendor/autoload.php';
 
 $path = $_SERVER['PATH_INFO'] ?? '/';
 $routes = require __DIR__ . '/../config/routes.php';
 
 if ($path === '/') {
-    header('Location: /list-products');
+    header('Location: /login');
     die();
 }
 
