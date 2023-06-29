@@ -6,6 +6,7 @@ use App\Controller\InsertUser;
 use App\Controller\ListProducts;
 use App\Controller\Login;
 use App\Controller\LoginUser;
+use App\Controller\Logout;
 use App\Controller\PersistProduct;
 use App\Controller\PersistUser;
 use App\Controller\RemoveProduct;
@@ -19,5 +20,6 @@ return [
     '/signup' => InsertUser::class,
     '/save-user' => PersistUser::class,
     '/login' => LoginUser::class,
-    '/make-login' => Login::class
+    '/make-login' => Login::class,
+    '/logout' => Logout::class
 ];
