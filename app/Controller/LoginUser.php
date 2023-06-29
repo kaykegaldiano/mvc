@@ -15,7 +15,7 @@ class LoginUser
             die();
         }
         $title = 'Login';
-        echo $this->getTwigFormTemplate('login/form.html', compact('title'));
+        echo $this->getTwigFormTemplate('login/form.html.twig', compact('title'));
         if (isset($_SESSION['logged']) && $_SESSION['logged'] === false) {
             unset($_SESSION['logged']);
         }

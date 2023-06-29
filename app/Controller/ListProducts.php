@@ -21,6 +21,6 @@ class ListProducts
         $username = explode(' ', $user->getName())[0];
         $products = $user->getProducts();
         $title = 'List Products';
-        echo $this->getTwigFormTemplate('products/list.html', compact('products', 'title', 'username'));
+        echo $this->getTwigFormTemplate('products/list.html.twig', compact('products', 'title', 'username'));
     }
 }

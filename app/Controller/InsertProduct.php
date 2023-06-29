@@ -17,6 +17,6 @@ class InsertProduct
         }
         $product = new Product();
         $title = 'Register Product';
-        echo $this->getTwigFormTemplate('products/form.html', compact('product', 'title'));
+        echo $this->getTwigFormTemplate('products/form.html.twig', compact('product', 'title'));
     }
 }

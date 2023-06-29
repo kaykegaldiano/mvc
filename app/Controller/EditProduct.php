@@ -19,6 +19,6 @@ class EditProduct
         $idProduct = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $product = (new EntityManagerCreator())->getEntityManager()->find(Product::class, $idProduct);
         $title = 'Edit Product';
-        echo $this->getTwigFormTemplate('products/form.html', compact('product', 'title'));
+        echo $this->getTwigFormTemplate('products/form.html.twig', compact('product', 'title'));
     }
 }

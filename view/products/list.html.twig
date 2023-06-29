@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    <div class="d-flex align-items-center justify-content-between">
+        <h1>{{ title }}</h1>
+        <div>
+            <a href="/new-product" class="btn btn-primary">Register Product</a>
+            <a href="/logout" class="btn btn-warning">Logout</a>
+        </div>
+    </div>
+
+    <div class="pb-2">
+        <h2>Hello, {{ username }}</h2>
+    </div>
+
+    <ul class="list-group">
+        {% for product in products %}
+            <li class="list-group-item d-flex align-items-center justify-content-between">
+                {{ product.getName()|raw }}
+                <span>
+                    <a href="/edit-product?id={{product.getId()}}" class="btn btn-sm btn-info">Edit</a>
+                    <a href="/remove-product?id={{product.getId()}}" class="btn btn-sm btn-danger">Remove</a>
+                </span>
+            </li>
+            {% else %}
+                <li class="list-group-item">
+                    <em>No product found</em>
+                </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

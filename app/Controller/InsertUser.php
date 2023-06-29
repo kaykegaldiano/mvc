@@ -13,6 +13,6 @@ class InsertUser
     {
         $user = new User();
         $title = 'Sign Up';
-        echo $this->getTwigFormTemplate('signup/form.html', compact('user', 'title'));
+        echo $this->getTwigFormTemplate('signup/form.html.twig', compact('user', 'title'));
     }
 }

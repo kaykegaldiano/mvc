@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block head %}
+    {{ parent() }}
+    <script src="js/vanilla-masker.min.js"></script>
+    <script src="js/signup.js"></script>
+{% endblock %}
+
+{% block main %}
+    <h1>{{title}}</h1>
+
+    <form action="/save-user{{ user.getId() ? '?id=' ~ user.getId() : '' }}" method="post" class="row g-3 pt-2">
+    
+        <div class="col-12">
+            <div class="form-floating">
+                <input type="text" name="name" class="form-control" placeholder="Your name" autocomplete="off" value="{{ user.getName() ? user.getName()|raw : '' }}" required>
+                <label>Your name</label>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-floating">
+                <input type="email" name="email" class="form-control" placeholder="Your email" autocomplete="off" value="{{ user.getEmail() ? user.getEmail()|raw : '' }}" required>
+                <label>Your email</label>
+            </div>
+        </div>
+    
+        <div class="col-12">
+            <div class="form-floating">
+                <input type="tel" name="document" class="form-control" placeholder="Your document" autocomplete="off" value="{{ user.getDocument() ? user.geDocument()|raw : '' }}" required>
+                <label>Your document</label>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-floating">
+                <input type="tel" name="phone" class="form-control" placeholder="Your phone with country and area code" autocomplete="off" value="{{ user.getPhone() ? user.gePhone()|raw : '' }}" required>
+                <label>Your phone with country and area code</label>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-floating">
+                <input type="password" name="password" class="form-control" placeholder="Your password" autocomplete="off" required>
+                <label>Your password</label>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-floating">
+                <input type="password" name="confirmPassword" class="form-control" placeholder="Confirm your password" autocomplete="off" required>
+                <label>Confirm your password</label>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-lg btn-primary w-100">Save</button>
+        </div>
+
+    </form>
+{% endblock %}
