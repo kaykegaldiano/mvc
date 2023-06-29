@@ -28,6 +28,9 @@ class User
     #[ORM\Column(type: 'string')]
     private string $phone = '';
 
+    #[ORM\Column(type: 'datetime')]
+    private DateTime $birthDate;
+
     #[ORM\Column(type: 'string')]
     private string $password = '';
 
@@ -39,6 +42,7 @@ class User
 
     public function __construct()
     {
+        $this->createdAt = new DateTime('now');
         $this->products = new ArrayCollection();
     }
 
@@ -87,7 +91,23 @@ class User
         $this->phone = $phone;
     }
 
-    public function getHashPassword(): string {
+    public function getBirthDate(): DateTime
+    {
+        return $this->birthDate;
+    }
+
+    public function setBirthDate(DateTime $birthDate): void
+    {
+        $this->birthDate = $birthDate;
+    }
+
+    public function getCreatedAt(): DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function getHashPassword(): string
+    {
         return $this->password;
     }
 
@@ -109,15 +129,5 @@ class User
     public function getProducts(): Collection
     {
         return $this->products;
-    }
-
-    public function getCreated(): DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreated(DateTime $date): void
-    {
-        $this->createdAt = $date;
     }
 }
