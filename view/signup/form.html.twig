@@ -3,7 +3,7 @@
 {% block head %}
     {{ parent() }}
     <script src="js/vanilla-masker.min.js"></script>
-    <script src="js/signup.js"></script>
+    <script defer src="js/signup.js"></script>
 {% endblock %}
 
 {% block main %}
@@ -13,29 +13,36 @@
     
         <div class="col-12">
             <div class="form-floating">
-                <input type="text" name="name" class="form-control" placeholder="Your name" autocomplete="off" value="{{ user.getName() ? user.getName()|raw : '' }}" required>
+                <input type="text" name="name" class="form-control" placeholder="Your name" autocomplete="off" required>
                 <label>Your name</label>
             </div>
         </div>
 
         <div class="col-12">
             <div class="form-floating">
-                <input type="email" name="email" class="form-control" placeholder="Your email" autocomplete="off" value="{{ user.getEmail() ? user.getEmail()|raw : '' }}" required>
+                <input type="email" name="email" class="form-control" placeholder="Your email" autocomplete="off" required>
                 <label>Your email</label>
             </div>
         </div>
     
         <div class="col-12">
             <div class="form-floating">
-                <input type="tel" name="document" class="form-control" placeholder="Your document" autocomplete="off" value="{{ user.getDocument() ? user.geDocument()|raw : '' }}" required>
+                <input type="tel" name="document" class="form-control" placeholder="Your document" autocomplete="off" maxlength="14" pattern="^(?:\d{3}\.){2}\d{3}-\d{2}$" required>
                 <label>Your document</label>
             </div>
         </div>
 
         <div class="col-12">
             <div class="form-floating">
-                <input type="tel" name="phone" class="form-control" placeholder="Your phone with country and area code" autocomplete="off" value="{{ user.getPhone() ? user.gePhone()|raw : '' }}" required>
+                <input type="tel" name="phone" class="form-control" placeholder="Your phone with country and area code" autocomplete="off" maxlength="17" pattern="^\+\d{2}\s\d{2}\s\d{5}-\d{4}$" required>
                 <label>Your phone with country and area code</label>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-floating">
+                <input type="tel" name="date" class="form-control" placeholder="Your birth date (yyyy/mm/dd)" autocomplete="off" maxlength="10" required>
+                <label>Your birth date (yyyy/mm/dd)</label>
             </div>
         </div>
 
