@@ -16,8 +16,12 @@ class Login
         $user = $userRepository->findOneBy(['email' => $email]);
         
         if (is_null($user) || !$user->checkPasswordIsCorrect($password)) {
-            header('Location: /login?invalid=true', response_code: 302);
+            $_SESSION['logged'] = false;
+            header('Location: /login', response_code: 302);
             die();
         }
+
+        $_SESSION['logged'] = true;
+        header('Location: /list-products', response_code: 302);
     }
 }

@@ -12,6 +12,10 @@ class EditProduct
 
     public function handle()
     {
+        if ($_SESSION['logged'] !== true) {
+            header('Location: /login');
+            die();
+        }
         $idProduct = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $product = (new EntityManagerCreator())->getEntityManager()->find(Product::class, $idProduct);
         $title = 'Edit Product';

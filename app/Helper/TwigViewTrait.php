@@ -11,6 +11,7 @@ trait TwigViewTrait
     {
         $loader = new FilesystemLoader(__DIR__ . '/../../view');
         $twig = new Environment($loader);
+        $twig->addGlobal('session', $_SESSION);
         return $twig->render($template, $data);
     }
 }

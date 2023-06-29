@@ -12,6 +12,10 @@ class ListProducts
 
     public function handle()
     {
+        if ($_SESSION['logged'] !== true) {
+            header('Location: /login');
+            die();
+        }
         $productRepository = (new EntityManagerCreator())->getEntityManager()->getRepository(Product::class);
         $products = $productRepository->findAll();
         $title = 'List Products';
