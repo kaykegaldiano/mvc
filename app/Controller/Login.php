@@ -22,6 +22,7 @@ class Login
         }
 
         $_SESSION['logged'] = true;
+        $_SESSION['email'] = $email;
         header('Location: /list-products', response_code: 302);
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Model;
 
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -12,16 +15,32 @@ class User
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
     private int|null $id = null;
+
     #[ORM\Column(type: 'string')]
     private string $name = '';
+
     #[ORM\Column(type: 'string', unique: true)]
     private string $email = '';
+
     #[ORM\Column(type: 'string', unique: true)]
     private string $document = '';
+
     #[ORM\Column(type: 'string')]
     private string $phone = '';
+
     #[ORM\Column(type: 'string')]
     private string $password = '';
+
+    #[ORM\Column(type: 'datetime')]
+    private DateTime $createdAt;
+
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'user')]
+    private Collection $products;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
 
     public function getId(): int|null
     {
@@ -80,5 +99,25 @@ class User
     public function checkPasswordIsCorrect(string $password): bool
     {
         return password_verify($password, $this->password);
+    }
+
+    public function addProduct(Product $product): void
+    {
+        $this->products[] = $product;
+    }
+
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function getCreated(): DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreated(DateTime $date): void
+    {
+        $this->createdAt = $date;
     }
 }

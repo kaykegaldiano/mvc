@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Helper\TwigViewTrait;
 use App\Infra\EntityManagerCreator;
-use App\Model\Product;
+use App\Model\User;
 
 class ListProducts
 {
@@ -16,9 +16,11 @@ class ListProducts
             header('Location: /login');
             die();
         }
-        $productRepository = (new EntityManagerCreator())->getEntityManager()->getRepository(Product::class);
-        $products = $productRepository->findAll();
+        $userRepository = (new EntityManagerCreator())->getEntityManager()->getRepository(User::class);
+        $user = $userRepository->findOneBy(['email' => $_SESSION['email']]);
+        $username = explode(' ', $user->getName())[0];
+        $products = $user->getProducts();
         $title = 'List Products';
-        echo $this->getTwigFormTemplate('products/list.html', compact('products', 'title'));
+        echo $this->getTwigFormTemplate('products/list.html', compact('products', 'title', 'username'));
     }
 }

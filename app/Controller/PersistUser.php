@@ -22,6 +22,7 @@ class PersistUser
         $user->setDocument($document);
         $user->setPhone($phone);
         $user->setPassword($password);
+        $user->setCreated(new \DateTime('now'));
         $entityManager->persist($user);
         $entityManager->flush();
         header('Location: /login', response_code: 302);

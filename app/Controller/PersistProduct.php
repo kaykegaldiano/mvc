@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Infra\EntityManagerCreator;
 use App\Model\Product;
+use App\Model\User;
 
 class PersistProduct
 {
@@ -16,8 +17,13 @@ class PersistProduct
             $product = $entityManager->find(Product::class, $idProduct);
             $product->setName($productName);
         } else {
+            $userRepository = $entityManager->getRepository(User::class);
+            $user = $userRepository->findOneBy(['email' => $_SESSION['email']]);
             $product = new Product();
             $product->setName($productName);
+            $product->setUser($user);
+            $user->getProducts()->add($product);
+            $entityManager->persist($user);
             $entityManager->persist($product);
         }
 
