@@ -8,7 +8,7 @@ trait HtmlViewTrait
     {
         ob_start();
         extract($data);
-        require __DIR__ . '/../../resources/view/' . $template;
+        require __DIR__ . '/../../view/' . $template;
         return ob_get_clean();
     }
 }
