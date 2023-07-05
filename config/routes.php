@@ -1,15 +1,17 @@
 <?php
 
-use App\Controller\EditProduct;
-use App\Controller\InsertProduct;
-use App\Controller\InsertUser;
-use App\Controller\ListProducts;
-use App\Controller\Login;
-use App\Controller\LoginUser;
-use App\Controller\Logout;
-use App\Controller\PersistProduct;
-use App\Controller\PersistUser;
-use App\Controller\RemoveProduct;
+use App\Controller\{
+    EditProduct,
+    InsertProduct,
+    InsertUser,
+    ListProducts,
+    Login,
+    LoginUser,
+    Logout,
+    PersistProduct,
+    PersistUser,
+    RemoveProduct
+};
 
 return [
     '/new-product' => InsertProduct::class,

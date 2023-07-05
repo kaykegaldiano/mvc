@@ -10,14 +10,20 @@ class ListProducts
 {
     use TwigViewTrait;
 
+    private $userRepository;
+
+    public function __construct()
+    {
+        $this->userRepository = (new EntityManagerCreator())->getEntityManager()->getRepository(User::class);
+    }
+
     public function handle()
     {
         if ($_SESSION['logged'] !== true) {
             header('Location: /login');
-            die();
+            return;
         }
-        $userRepository = (new EntityManagerCreator())->getEntityManager()->getRepository(User::class);
-        $user = $userRepository->findOneBy(['email' => $_SESSION['email']]);
+        $user = $this->userRepository->findOneBy(['email' => $_SESSION['email']]);
         $username = explode(' ', $user->getName())[0];
         $products = $user->getProducts();
         $title = 'List Products';

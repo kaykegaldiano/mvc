@@ -12,7 +12,7 @@ class LoginUser
     {
         if (isset($_SESSION['logged']) && $_SESSION['logged'] === true) {
             header('Location: /list-products', response_code: 302);
-            die();
+            return;
         }
         $title = 'Login';
         echo $this->getTwigFormTemplate('login/form.html.twig', compact('title'));
