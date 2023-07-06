@@ -2,6 +2,7 @@
 
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -38,8 +39,10 @@ $creator = new ServerRequestCreator(
 $request = $creator->fromGlobals();
 
 $controllerClass = $routes[$path];
+/** @var ContainerInterface */
+$container = require __DIR__ . '/../config/dependencies.php';
 /** @var RequestHandlerInterface $controller */
-$controller = new $controllerClass();
+$controller = $container->get($controllerClass);
 $response = $controller->handle($request);
 
 foreach ($response->getHeaders() as $name => $values) {
