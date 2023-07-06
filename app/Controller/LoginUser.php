@@ -3,21 +3,18 @@
 namespace App\Controller;
 
 use App\Helper\TwigViewTrait;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class LoginUser
+class LoginUser implements RequestHandlerInterface
 {
     use TwigViewTrait;
 
-    public function handle()
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        if (isset($_SESSION['logged']) && $_SESSION['logged'] === true) {
-            header('Location: /list-products', response_code: 302);
-            return;
-        }
-        $title = 'Login';
-        echo $this->getTwigFormTemplate('login/form.html.twig', compact('title'));
-        if (isset($_SESSION['logged']) && $_SESSION['logged'] === false) {
-            unset($_SESSION['logged']);
-        }
+        $html = $this->getTwigFormTemplate('login/form.html.twig', ['title' => 'Login']);
+        return new Response(200, [], $html);
     }
 }

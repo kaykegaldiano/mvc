@@ -1,5 +1,9 @@
 <?php
 
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7Server\ServerRequestCreator;
+use Psr\Http\Server\RequestHandlerInterface;
+
 require __DIR__ . '/../vendor/autoload.php';
 
 $path = $_SERVER['PATH_INFO'] ?? '/';
@@ -22,6 +26,26 @@ if (!isset($_SESSION['logged']) && stripos($path, 'login') === false && $path !=
     die();
 }
 
+$psr17Factory = new Psr17Factory();
+
+$creator = new ServerRequestCreator(
+    $psr17Factory, // ServerRequestFactory
+    $psr17Factory, // UriFactory
+    $psr17Factory, // UploadedFileFactory
+    $psr17Factory  // StreamFactory
+);
+
+$request = $creator->fromGlobals();
+
 $controllerClass = $routes[$path];
+/** @var RequestHandlerInterface $controller */
 $controller = new $controllerClass();
-$controller->handle();
+$response = $controller->handle($request);
+
+foreach ($response->getHeaders() as $name => $values) {
+    foreach ($values as $value) {
+        header(sprintf('%s: %s', $name, $value), false);
+    }
+}
+
+echo $response->getBody();
