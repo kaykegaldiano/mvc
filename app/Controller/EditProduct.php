@@ -3,33 +3,30 @@
 namespace App\Controller;
 
 use App\Helper\TwigViewTrait;
-use App\Infra\EntityManagerCreator;
 use App\Model\Product;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectRepository;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class EditProduct
+class EditProduct implements RequestHandlerInterface
 {
     use TwigViewTrait;
 
-    private EntityManagerInterface $entityManager;
-    private ObjectRepository $productsRepository;
-
-    public function __construct()
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = (new EntityManagerCreator())->getEntityManager();
-        $this->productsRepository = $this->entityManager->getRepository(Product::class);
     }
 
-    public function handle()
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $idProduct = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $idProduct = filter_var($request->getQueryParams()['id'], FILTER_VALIDATE_INT);
         if (is_null($idProduct) || $idProduct === false) {
-            header('Location: /list-products');
-            return;
+            return new Response(302, ['Location' => '/list-products']);
         }
-        $product = $this->productsRepository->find($idProduct);
+        $product = $this->entityManager->find(Product::class, $idProduct);
         $title = 'Edit Product';
-        echo $this->getTwigFormTemplate('products/form.html.twig', compact('product', 'title'));
+        $html = $this->getTwigFormTemplate('products/form.html.twig', compact('product', 'title'));
+        return new Response(200, [], $html);
     }
 }

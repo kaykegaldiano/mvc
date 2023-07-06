@@ -3,16 +3,18 @@
 namespace App\Controller;
 
 use App\Helper\TwigViewTrait;
-use App\Model\Product;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class InsertProduct
+class InsertProduct implements RequestHandlerInterface
 {
     use TwigViewTrait;
 
-    public function handle()
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $product = new Product();
-        $title = 'New Product';
-        echo $this->getTwigFormTemplate('products/form.html.twig', compact('product', 'title'));
+        $html = $this->getTwigFormTemplate('products/form.html.twig', ['title' => 'New Product']);
+        return new Response(200, [], $html);
     }
 }

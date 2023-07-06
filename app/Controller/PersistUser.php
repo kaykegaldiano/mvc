@@ -2,28 +2,28 @@
 
 namespace App\Controller;
 
-use App\Infra\EntityManagerCreator;
 use App\Model\User;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class PersistUser
+class PersistUser implements RequestHandlerInterface
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct()
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = (new EntityManagerCreator())->getEntityManager();
     }
 
-    public function handle()
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $name = htmlspecialchars(filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS));
-        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        $document = filter_input(INPUT_POST, 'document', FILTER_SANITIZE_SPECIAL_CHARS);
-        $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_SPECIAL_CHARS);
-        $birthDate = filter_input(INPUT_POST, 'date', FILTER_SANITIZE_SPECIAL_CHARS);
-        $password = filter_input(INPUT_POST, 'confirmPassword');
+        $name = htmlspecialchars(filter_var($request->getParsedBody()['name'], FILTER_SANITIZE_SPECIAL_CHARS));
+        $email = filter_var($request->getParsedBody()['email'], FILTER_SANITIZE_EMAIL);
+        $document = filter_var($request->getParsedBody()['document'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $phone = filter_var($request->getParsedBody()['phone'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $birthDate = filter_var($request->getParsedBody()['date'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $password = filter_var($request->getParsedBody()['confirmPassword']);
 
         $user = new User();
         $user->setName($name);
@@ -34,6 +34,6 @@ class PersistUser
         $user->setBirthDate(new DateTime(str_replace('/', '-', $birthDate)));
         $this->entityManager->persist($user);
         $this->entityManager->flush();
-        header('Location: /login', response_code: 302);
+        return new Response(302, ['Location' => '/login']);
     }
 }

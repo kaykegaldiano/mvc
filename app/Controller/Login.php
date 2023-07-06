@@ -3,33 +3,33 @@
 namespace App\Controller;
 
 use App\Helper\FlashMessageTrait;
-use App\Infra\EntityManagerCreator;
 use App\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class Login
+class Login implements RequestHandlerInterface
 {
     use FlashMessageTrait;
 
-    private EntityManagerInterface $entityManager;
     private ObjectRepository $userRepository;
 
-    public function __construct()
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->entityManager = (new EntityManagerCreator())->getEntityManager();
-        $this->userRepository = $this->entityManager->getRepository(User::class);
+        $this->userRepository = $entityManager->getRepository(User::class);
     }
     
-    public function handle()
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $password = filter_input(INPUT_POST, 'password');
+        $email = filter_var($request->getParsedBody()['email'], FILTER_VALIDATE_EMAIL);
+        $password = filter_var($request->getParsedBody()['password']);
 
         if (is_null($email) || $email === false) {
             $this->defineMessage('danger', 'E-mail is not valid.');
-            header('Location: /login', response_code: 302);
-            return;
+            return new Response(302, ['Location' => '/login']);
         }
 
         /** @var User $user */
@@ -37,12 +37,12 @@ class Login
         
         if (is_null($user) || !$user->checkPasswordIsCorrect($password)) {
             $this->defineMessage('danger', 'E-mail or password invalids');
-            header('Location: /login', response_code: 302);
-            return;
+            return new Response(302, ['Location' => '/login']);
         }
 
         $_SESSION['logged'] = true;
         $_SESSION['email'] = $email;
-        header('Location: /list-products', response_code: 302);
+        
+        return new Response(302, ['Location' => '/list-products']);
     }
 }

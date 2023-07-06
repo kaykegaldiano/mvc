@@ -3,33 +3,32 @@
 namespace App\Controller;
 
 use App\Helper\FlashMessageTrait;
-use App\Infra\EntityManagerCreator;
 use App\Model\Product;
 use Doctrine\ORM\EntityManagerInterface;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class RemoveProduct
+class RemoveProduct implements RequestHandlerInterface
 {
     use FlashMessageTrait;
 
-    private EntityManagerInterface $entityManager;
-
-    public function __construct()
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = (new EntityManagerCreator())->getEntityManager();
     }
 
-    public function handle()
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $idProduct = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $idProduct = filter_var($request->getQueryParams()['id'], FILTER_VALIDATE_INT);
         if (is_null($idProduct) || $idProduct === false) {
             $this->defineMessage('danger', 'Product doesn\'t exist.');
-            header('Location: /list-products');
-            return;
+            return new Response(302, ['Location' => '/list-products']);
         }
         $product = $this->entityManager->getReference(Product::class, $idProduct);
         $this->entityManager->remove($product);
         $this->entityManager->flush();
         $this->defineMessage('success', 'Product removed with success.');
-        header('Location: /list-products', response_code: 302);
+        return new Response(302, ['Location' => '/list-products']);
     }
 }

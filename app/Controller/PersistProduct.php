@@ -3,33 +3,36 @@
 namespace App\Controller;
 
 use App\Helper\FlashMessageTrait;
-use App\Infra\EntityManagerCreator;
 use App\Model\Product;
 use App\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class PersistProduct
+class PersistProduct implements RequestHandlerInterface
 {
     use FlashMessageTrait;
 
-    private EntityManagerInterface $entityManager;
+    private EntityRepository $userRepository;
 
-    public function __construct()
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = (new EntityManagerCreator())->getEntityManager();
+        $this->userRepository = $this->entityManager->getRepository(User::class);
     }
 
-    public function handle()
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $productName = htmlspecialchars(filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS));
-        $idProduct = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $productName = htmlspecialchars(filter_var($request->getParsedBody()['name'], FILTER_SANITIZE_SPECIAL_CHARS));
+        $idProduct = filter_var($request->getQueryParams()['id'], FILTER_VALIDATE_INT);
         if (!is_null($idProduct) && $idProduct !== false) {
             $product = $this->entityManager->find(Product::class, $idProduct);
             $product->setName($productName);
             $this->defineMessage('success', 'Product updated with success.');
         } else {
-            $userRepository = $this->entityManager->getRepository(User::class);
-            $user = $userRepository->findOneBy(['email' => $_SESSION['email']]);
+            $user = $this->userRepository->findOneBy(['email' => $_SESSION['email']]);
             $product = new Product();
             $product->setName($productName);
             $product->setUser($user);
@@ -39,6 +42,6 @@ class PersistProduct
             $this->defineMessage('success', 'Product created with success.');
         }
         $this->entityManager->flush();
-        header('Location: /list-products', response_code: 302);
+        return new Response(302, ['Location' => '/list-products']);
     }
 }

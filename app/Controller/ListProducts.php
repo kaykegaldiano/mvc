@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Helper\TwigViewTrait;
-use App\Infra\EntityManagerCreator;
 use App\Model\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;

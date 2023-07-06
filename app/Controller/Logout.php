@@ -2,11 +2,16 @@
 
 namespace App\Controller;
 
-class Logout
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+
+class Logout implements RequestHandlerInterface
 {
-    public function handle()
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         session_destroy();
-        header('Location: /login', response_code: 302);
+        return new Response(302, ['Location' => '/login']);
     }
 }

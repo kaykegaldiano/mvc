@@ -3,16 +3,18 @@
 namespace App\Controller;
 
 use App\Helper\TwigViewTrait;
-use App\Model\User;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class InsertUser
+class InsertUser implements RequestHandlerInterface
 {
     use TwigViewTrait;
 
-    public function handle()
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $user = new User();
-        $title = 'Sign Up';
-        echo $this->getTwigFormTemplate('signup/form.html.twig', compact('user', 'title'));
+        $html = $this->getTwigFormTemplate('signup/form.html.twig', ['title' => 'Sign Up']);
+        return new Response(200, [], $html);
     }
 }
