@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Helper\FlashMessageTrait;
 use App\Infra\EntityManagerCreator;
 use App\Model\Product;
 use App\Model\User;
@@ -9,6 +10,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class PersistProduct
 {
+    use FlashMessageTrait;
+
     private EntityManagerInterface $entityManager;
 
     public function __construct()
@@ -23,6 +26,7 @@ class PersistProduct
         if (!is_null($idProduct) && $idProduct !== false) {
             $product = $this->entityManager->find(Product::class, $idProduct);
             $product->setName($productName);
+            $this->defineMessage('success', 'Product updated with success.');
         } else {
             $userRepository = $this->entityManager->getRepository(User::class);
             $user = $userRepository->findOneBy(['email' => $_SESSION['email']]);
@@ -32,6 +36,7 @@ class PersistProduct
             $user->getProducts()->add($product);
             $this->entityManager->persist($user);
             $this->entityManager->persist($product);
+            $this->defineMessage('success', 'Product created with success.');
         }
         $this->entityManager->flush();
         header('Location: /list-products', response_code: 302);

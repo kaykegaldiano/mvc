@@ -11,7 +11,12 @@
 </head>
 <body>
     <main class="container pt-4">
-        {% block main %}{% endblock %}
+        {% block main %}
+            {% if session.msg %}
+                <div class="alert alert-{{ session.msgType }}">{{ session.msg }}</div>
+                {% do unsetMsg() %}
+            {% endif %}
+        {% endblock %}
     </main>
 </body>
 </html>

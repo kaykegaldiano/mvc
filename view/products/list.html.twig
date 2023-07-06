@@ -13,6 +13,8 @@
         <h2>Hello, {{ username }}</h2>
     </div>
 
+    {{ parent() }}
+
     <ul class="list-group">
         {% for product in products %}
             <li class="list-group-item d-flex align-items-center justify-content-between">

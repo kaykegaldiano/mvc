@@ -1,7 +1,5 @@
 <?php
 
-session_start();
-
 require __DIR__ . '/../vendor/autoload.php';
 
 $path = $_SERVER['PATH_INFO'] ?? '/';
@@ -14,6 +12,13 @@ if ($path === '/') {
 
 if (!isset($routes[$path])) {
     http_response_code(404);
+    die();
+}
+
+session_start();
+
+if (!isset($_SESSION['logged']) && stripos($path, 'login') === false && $path !== '/signup' && $path !== '/save-user') {
+    header('Location: /login', response_code: 302);
     die();
 }
 

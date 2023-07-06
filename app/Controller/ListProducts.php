@@ -19,10 +19,6 @@ class ListProducts
 
     public function handle()
     {
-        if ($_SESSION['logged'] !== true) {
-            header('Location: /login');
-            return;
-        }
         $user = $this->userRepository->findOneBy(['email' => $_SESSION['email']]);
         $username = explode(' ', $user->getName())[0];
         $products = $user->getProducts();

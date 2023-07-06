@@ -4,11 +4,7 @@
 
     <h1>{{ title }}</h1>
 
-    {% if session %}
-        {% if session.logged == false %}
-            <div class="alert alert-danger" role="alert">User or password are invalids</div>
-        {% endif %}
-    {% endif %}
+    {{ parent() }}
 
     <form action="/make-login" method="post" class="row g-3 pt-2">
 

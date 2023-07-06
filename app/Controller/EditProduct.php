@@ -23,10 +23,6 @@ class EditProduct
 
     public function handle()
     {
-        if ($_SESSION['logged'] !== true) {
-            header('Location: /login');
-            return;
-        }
         $idProduct = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if (is_null($idProduct) || $idProduct === false) {
             header('Location: /list-products');
