@@ -4,7 +4,11 @@
         "doctrine/dbal": "^3.2",
         "symfony/yaml": "^5.4",
         "symfony/cache": "^5.4",
-        "twig/twig": "^3.6"
+        "twig/twig": "^3.6",
+        "psr/http-message": "^1.0",
+        "nyholm/psr7": "^1.8",
+        "nyholm/psr7-server": "^1.0",
+        "psr/http-server-handler": "^1.0"
     },
     "autoload": {
         "psr-4": {
