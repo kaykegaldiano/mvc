@@ -14,6 +14,9 @@ class LoginUser implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        if (isset($_SESSION['logged'])) {
+            return new Response(302, ['Location' => 'list-products']);
+        }
         $html = $this->getTwigFormTemplate('login/form.html.twig', ['title' => 'Login']);
         return new Response(200, [], $html);
     }
